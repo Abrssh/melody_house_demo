@@ -1,37 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:flame/game.dart';
+import 'package:flutter/services.dart';
+import 'package:melody_house_demo/melody_house.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Melody House',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Text('Flutter Demo Home Page'),
+      home: const GameScreen(),
+    );
+  }
+}
+
+class GameScreen extends StatefulWidget {
+  const GameScreen({super.key});
+
+  @override
+  State<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
+  // Create separate focus nodes
+  final FocusNode _gameFocusNode = FocusNode();
+
+  // Create a game instance that we can reference
+  final MelodyHouseGame _game = MelodyHouseGame();
+
+  @override
+  void initState() {
+    super.initState();
+    // Request focus when the screen is initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _gameFocusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    _gameFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Focus(
+        focusNode: _gameFocusNode,
+        autofocus: true,
+        onKeyEvent: (FocusNode node, KeyEvent event) {
+          print('Main Key event: ${event.logicalKey.keyLabel}');
+          // Forward the key event to the game
+          _game.onKeyEvent(event, {event.logicalKey});
+          return KeyEventResult.handled;
+        },
+        child: GameWidget(
+          game: _game,
+        ),
+      ),
     );
   }
 }
