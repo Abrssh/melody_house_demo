@@ -61,7 +61,7 @@ class _GameScreenState extends State<GameScreen> {
         focusNode: _gameFocusNode,
         autofocus: true,
         onKeyEvent: (FocusNode node, KeyEvent event) {
-          print('Main Key event: ${event.logicalKey.keyLabel}');
+          debugPrint('Main Key event: ${event.logicalKey.keyLabel}');
           // Forward the key event to the game
           _game.onKeyEvent(event, {event.logicalKey});
           return KeyEventResult.handled;

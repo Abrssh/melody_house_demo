@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'package:melody_house_demo/Components/player_component.dart';
 
 class CameraController extends Component with HasGameReference {

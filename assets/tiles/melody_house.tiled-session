@@ -3,19 +3,36 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "outdoor.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
+        "outdoor.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 234.5,
+                "y": 151.5
+            }
+        },
+        "outdoor.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
+        }
     },
     "last.imagePath": "C:/Users/Abrham daniel/Desktop/New Flutter Projects/Melody House/melody_house_demo/assets/images/tilesets",
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
+        "outdoor.tmx",
+        "outdoor.tsx"
     ],
     "project": "melody_house.tiled-project",
     "recentFiles": [
+        "outdoor.tsx",
+        "outdoor.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

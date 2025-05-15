@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   flame: ^1.28.1
   flame_tiled: ^3.0.2
+  flame_audio: ^2.11.5
+  audioplayers: ^6.4.0
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +72,11 @@ flutter:
     - assets/images/characters/human/idle/
     - assets/images/characters/human/run/
     - assets/audio/
+    - assets/audio/background/
+    - assets/audio/sfx/
+    - assets/audio/sfx/interaction/
+    - assets/audio/sfx/player_movement/
+    - assets/audio/sfx/ui/
     - assets/tiles/
 
   # An image asset can refer to one or more resolution-specific "variants", see

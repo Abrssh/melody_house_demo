@@ -3,7 +3,7 @@ import 'package:flame/palette.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
 import 'package:melody_house_demo/Components/camera_controller.dart';
-
+import 'package:melody_house_demo/Components/collision_block.dart';
 import 'package:melody_house_demo/Components/player_component.dart';
 import 'package:melody_house_demo/Constants/asset_path.dart';
 import 'package:melody_house_demo/melody_house.dart';
@@ -12,8 +12,9 @@ class OutdoorScene extends Component with HasGameReference<MelodyHouseGame> {
   late final World world;
   late final CameraComponent cameraComponent;
   late final TiledComponent tiledMap;
-
   late final Player player;
+
+  final List<CollisionBlock> _collisionBlocks = [];
 
   double mapWidth = 0;
   double mapHeight = 0;
@@ -25,11 +26,11 @@ class OutdoorScene extends Component with HasGameReference<MelodyHouseGame> {
     add(world);
 
     try {
-      // Alternative loading approach
+      // Load the tiled map
       tiledMap = await TiledComponent.load(
-        AssetPath.outdoorTileMap, // Try without the full path
+        AssetPath.outdoorTileMap,
         Vector2.all(16),
-        prefix: "assets/tiles/", // Use the prefix parameter for the directory
+        prefix: "assets/tiles/",
       );
 
       world.add(tiledMap);
@@ -43,23 +44,41 @@ class OutdoorScene extends Component with HasGameReference<MelodyHouseGame> {
 
       debugPrint('Map dimensions: $mapWidth x $mapHeight');
 
+      // Load collision objects from the object layer
+      // Assuming your object layer is named "Collisions"
+      final collisionsLayer =
+          tiledMap.tileMap.getLayer<ObjectGroup>('Collisions');
+
+      if (collisionsLayer != null) {
+        for (final obj in collisionsLayer.objects) {
+          final collisionBlock = CollisionBlock(
+            position: Vector2(obj.x, obj.y),
+            size: Vector2(obj.width, obj.height),
+          );
+          _collisionBlocks.add(collisionBlock);
+          world.add(collisionBlock);
+        }
+        debugPrint('Loaded ${_collisionBlocks.length} collision blocks');
+      } else {
+        debugPrint(
+            'No collision layer found. Make sure you have a layer named "Collisions"');
+      }
+
       // Create player at the center of the map
       player = Player(
         position: Vector2(mapWidth / 2, mapHeight / 2),
         size: Vector2(64, 64),
+        collisionBlocks: _collisionBlocks,
       );
       world.add(player);
 
-      // Setup camera with more explicit settings
+      // Setup camera
       cameraComponent = CameraComponent(world: world);
-
       cameraComponent.viewfinder.anchor = Anchor.center;
       cameraComponent.viewfinder.position =
           Vector2(mapWidth / 2, mapHeight / 2);
       cameraComponent.viewfinder.zoom = 4.0;
-
       add(cameraComponent);
-      // cameraComponent.follow(player);
 
       add(CameraController(
         player: player,
@@ -67,18 +86,20 @@ class OutdoorScene extends Component with HasGameReference<MelodyHouseGame> {
         mapHeight: mapHeight.toDouble(),
         camera: cameraComponent,
       ));
+
+      // Play background audio
+      game.audioManager.playBackgroundMusic(AssetPath.outdoorMusic);
+      game.audioManager.setMusicVolume(0.5);
     } catch (e) {
       debugPrint('Failed to load Tiled map: $e');
-
-      // Add a red rectangle to show there was an error
       world.add(RectangleComponent(
         size: Vector2(300, 300),
         position: Vector2(200, 150),
         paint: BasicPalette.red.paint(),
       ));
-
-      return super.onLoad();
     }
+
+    return super.onLoad();
   }
 
   // Works but better if the camera bound system is its own component
