@@ -3,36 +3,79 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "outdoor.tmx",
+    "activeFile": "indoor.tmx",
     "expandedProjectPaths": [
         "."
     ],
     "fileStates": {
+        "C:/Users/Abrham daniel/Desktop/Mini Carpool/Game/mini_carpoolgame/assets/tiles/Level 2.tmx": {
+            "scale": 1.2456380208333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 384.5418909737104,
+                "y": 192.67234620812212
+            }
+        },
+        "C:/Users/Abrham daniel/Desktop/Mini Carpool/Game/mini_carpoolgame/assets/tiles/MegaPixelArt32x32pxIcons_SpriteSheet.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Abrham daniel/Desktop/Mini Carpool/Game/mini_carpoolgame/assets/tiles/Office Building.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Abrham daniel/Desktop/Mini Carpool/Game/mini_carpoolgame/assets/tiles/Tilemap32x32_down_environment.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Abrham daniel/Desktop/Mini Carpool/Game/mini_carpoolgame/assets/tiles/minitree32x48.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Abrham daniel/Desktop/Mini Carpool/Game/mini_carpoolgame/assets/tiles/tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "indoor.tmx": {
+            "expandedObjectLayers": [
+                8
+            ],
+            "scale": 11,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 317.1818181818182,
+                "y": 215.0909090909091
+            }
+        },
         "outdoor.tmx": {
-            "scale": 2,
+            "expandedObjectLayers": [
+                7,
+                5
+            ],
+            "scale": 4,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 234.5,
-                "y": 151.5
+                "x": 382.75,
+                "y": 276.25
             }
         },
         "outdoor.tsx": {
-            "scaleInDock": 1.5,
-            "scaleInEditor": 1
+            "scaleInDock": 2,
+            "scaleInEditor": 8
         }
     },
     "last.imagePath": "C:/Users/Abrham daniel/Desktop/New Flutter Projects/Melody House/melody_house_demo/assets/images/tilesets",
+    "map.height": 45,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
+    "map.width": 80,
     "openFiles": [
         "outdoor.tmx",
-        "outdoor.tsx"
+        "outdoor.tsx",
+        "indoor.tmx"
     ],
     "project": "melody_house.tiled-project",
     "recentFiles": [
+        "outdoor.tmx",
         "outdoor.tsx",
-        "outdoor.tmx"
+        "indoor.tmx",
+        "C:/Users/Abrham daniel/Desktop/Mini Carpool/Game/mini_carpoolgame/assets/tiles/Level 2.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

@@ -20,7 +20,15 @@ class Player extends SpriteAnimationComponent
   // Footstep timer
   double _footstepTimer = 0.0;
   final double _footstepInterval = 0.3;
-  String _currentSurface = 'grass';
+  String currentSurface = 'grass';
+
+  // Gateway interaction
+  final Vector2 gateWayPosition;
+  final VoidCallback onGateWayReached;
+  final double _interactionDistance = 25.0; // Reduced distance to show prompt
+  bool _isNearGateway = false;
+  late final TextComponent _interactionPrompt;
+  bool _transitionInProgress = false; // Flag to prevent multiple transitions
 
   // Animations
   late final SpriteAnimation _idleAnimation;
@@ -28,6 +36,9 @@ class Player extends SpriteAnimationComponent
 
   Player({
     required Vector2 position,
+    required this.gateWayPosition,
+    required this.onGateWayReached,
+    this.currentSurface = "grass",
     Vector2? size,
     required this.collisionBlocks,
   }) : super(
@@ -81,11 +92,49 @@ class Player extends SpriteAnimationComponent
     }
 
     add(_collisionHitbox);
+
+    // Create interaction prompt
+    _interactionPrompt = TextComponent(
+      text: 'Press E',
+      textRenderer: TextPaint(
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          shadows: [
+            Shadow(
+              blurRadius: 2.0,
+              color: Colors.black,
+              offset: Offset(1.0, 1.0),
+            ),
+          ],
+        ),
+      ),
+      anchor: Anchor.center,
+      position: Vector2(0, -40), // Position above the player
+    );
+
+    // Start with the prompt not added to the component tree
+    // We'll add/remove it dynamically instead of toggling visibility
+
+    // Debug gateway position
+    if (_debugCollision) {
+      final gatewayMarker = CircleComponent(
+        radius: 5,
+        position: Vector2(gateWayPosition.x, gateWayPosition.y),
+        paint: Paint()..color = Colors.red,
+      );
+      game.world.add(gatewayMarker);
+      debugPrint('Gateway position: $gateWayPosition');
+    }
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+
+    // Skip updates if transition is in progress
+    if (_transitionInProgress) return;
 
     // Apply velocity to position with collision detection
     if (_velocity.x != 0 || _velocity.y != 0) {
@@ -110,7 +159,7 @@ class Player extends SpriteAnimationComponent
       _footstepTimer += dt;
       if (_footstepTimer >= _footstepInterval) {
         _footstepTimer = 0;
-        game.audioManager.playFootstep(_currentSurface);
+        game.audioManager.playFootstep(currentSurface);
       }
     } else {
       // Switch to idle animation when not moving
@@ -129,6 +178,24 @@ class Player extends SpriteAnimationComponent
     } else if (_velocity.x < 0 && _facingRight) {
       _facingRight = false;
       flipHorizontallyAroundCenter();
+    }
+
+    // Check distance to gateway
+    final distanceToGateway = position.distanceTo(gateWayPosition);
+    final wasNearGateway = _isNearGateway;
+    _isNearGateway = distanceToGateway <= _interactionDistance;
+
+    // More efficient approach: Add/remove the prompt component instead of toggling visibility
+    if (_isNearGateway && !wasNearGateway) {
+      // Only add if not already a child
+      if (!children.contains(_interactionPrompt)) {
+        add(_interactionPrompt);
+      }
+    } else if (!_isNearGateway && wasNearGateway) {
+      // Only remove if it's a child
+      if (children.contains(_interactionPrompt)) {
+        remove(_interactionPrompt);
+      }
     }
   }
 
@@ -157,12 +224,20 @@ class Player extends SpriteAnimationComponent
       }
     }
 
+    // Don't check gateway collision - allow player to move freely through gateway
     return false; // No collision
   }
 
+  // Track pressed keys for collision check
+  Set<LogicalKeyboardKey> keysPressed = {};
+
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    debugPrint("Event:  Keys: $keysPressed");
+    this.keysPressed = keysPressed;
+
+    // Skip key handling if transition is in progress
+    if (_transitionInProgress) return true;
+
     // Reset velocity
     _velocity.setZero();
 
@@ -170,7 +245,7 @@ class Player extends SpriteAnimationComponent
     if (keysPressed.contains(LogicalKeyboardKey.keyW) ||
         keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
       _velocity.y = -_moveSpeed;
-      debugPrint("W pressed");
+      debugPrint("W pressed ${_velocity.y}");
     }
     if (keysPressed.contains(LogicalKeyboardKey.keyS) ||
         keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
@@ -192,6 +267,20 @@ class Player extends SpriteAnimationComponent
       return true;
     }
 
+    // Gateway interaction - only trigger on key down, not while key is held
+    if (event is KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.keyE &&
+        _isNearGateway) {
+      _transitionInProgress = true; // Prevent multiple transitions
+
+      // Use Future.delayed to ensure the transition happens after the current frame
+      Future.delayed(Duration.zero, () {
+        onGateWayReached();
+      });
+
+      return true;
+    }
+
     // Normalize diagonal movement to prevent faster diagonal speed
     if (_velocity.length > _moveSpeed) {
       _velocity.normalize();
@@ -203,7 +292,7 @@ class Player extends SpriteAnimationComponent
 
   // Method to set the current surface type (call this when player moves to different terrain)
   void setCurrentSurface(String surface) {
-    _currentSurface = surface;
+    currentSurface = surface;
   }
 
   SpriteAnimation _spriteAnimationCreation(

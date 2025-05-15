@@ -1,5 +1,6 @@
 class AssetPath {
   static String outdoorTileMap = 'outdoor.tmx';
+  static String indoorTileMap = 'indoor.tmx';
 
   // Character sprites path
   static String playerIdleSprite = 'characters/human/idle/base_idle_strip9.png';

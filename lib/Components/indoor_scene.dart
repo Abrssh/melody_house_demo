@@ -8,7 +8,7 @@ import 'package:melody_house_demo/Components/player_component.dart';
 import 'package:melody_house_demo/Constants/asset_path.dart';
 import 'package:melody_house_demo/melody_house.dart';
 
-class OutdoorScene extends Component with HasGameReference<MelodyHouseGame> {
+class IndoorScene extends Component with HasGameReference<MelodyHouseGame> {
   late final World world;
   late final CameraComponent cameraComponent;
   late final TiledComponent tiledMap;
@@ -19,7 +19,7 @@ class OutdoorScene extends Component with HasGameReference<MelodyHouseGame> {
   double mapWidth = 0;
   double mapHeight = 0;
 
-  late final Vector2 indoorGateWayPosition;
+  late final Vector2 outDoorGatewayPosition;
 
   @override
   Future<void> onLoad() async {
@@ -30,7 +30,7 @@ class OutdoorScene extends Component with HasGameReference<MelodyHouseGame> {
     try {
       // Load the tiled map
       tiledMap = await TiledComponent.load(
-        AssetPath.outdoorTileMap,
+        AssetPath.indoorTileMap,
         Vector2.all(16),
         prefix: "assets/tiles/",
       );
@@ -77,8 +77,8 @@ class OutdoorScene extends Component with HasGameReference<MelodyHouseGame> {
           if (obj.name == 'player') {
             spawnPoint = Vector2(obj.x, obj.y);
             debugPrint('Player spawn point set to: ${obj.position}');
-          } else if (obj.name == 'indoor') {
-            indoorGateWayPosition = Vector2(obj.x, obj.y);
+          } else if (obj.name == 'outdoor') {
+            outDoorGatewayPosition = Vector2(obj.x, obj.y);
             debugPrint('Indoor gateway spawn point set to: ${obj.position}');
           }
         }
@@ -92,8 +92,9 @@ class OutdoorScene extends Component with HasGameReference<MelodyHouseGame> {
         position: Vector2(spawnPoint.x, spawnPoint.y),
         size: Vector2(64, 64),
         collisionBlocks: _collisionBlocks,
-        gateWayPosition: indoorGateWayPosition,
-        onGateWayReached: enterBuilding,
+        gateWayPosition: outDoorGatewayPosition,
+        onGateWayReached: exitBuilding,
+        currentSurface: 'gravel',
       );
       world.add(player);
 
@@ -113,7 +114,7 @@ class OutdoorScene extends Component with HasGameReference<MelodyHouseGame> {
       ));
 
       // Play background audio
-      game.audioManager.playBackgroundMusic(AssetPath.outdoorMusic);
+      game.audioManager.playBackgroundMusic(AssetPath.indoorMusic);
       game.audioManager.setMusicVolume(0.5);
     } catch (e) {
       debugPrint('Failed to load Tiled map: $e');
@@ -127,8 +128,8 @@ class OutdoorScene extends Component with HasGameReference<MelodyHouseGame> {
     return super.onLoad();
   }
 
-  // Method to switch to indoor scene
-  void enterBuilding() {
-    game.loadIndoorScene();
+  // Method to switch to outdoor scene
+  void exitBuilding() {
+    game.loadOutdoorScene();
   }
 }
