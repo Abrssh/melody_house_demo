@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/services.dart';
-import 'package:melody_house_demo/melody_house.dart';
+import 'package:melody_house_demo/ui/main_menu_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Set preferred orientations
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
+
+  // Hide status bar and navigation bar
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
   runApp(const MyApp());
 }
 
@@ -16,60 +24,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Melody House',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const GameScreen(),
-    );
-  }
-}
-
-class GameScreen extends StatefulWidget {
-  const GameScreen({super.key});
-
-  @override
-  State<GameScreen> createState() => _GameScreenState();
-}
-
-class _GameScreenState extends State<GameScreen> {
-  // Create separate focus nodes
-  final FocusNode _gameFocusNode = FocusNode();
-
-  // Create a game instance that we can reference
-  final MelodyHouseGame _game = MelodyHouseGame();
-
-  @override
-  void initState() {
-    super.initState();
-    // Request focus when the screen is initialized
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _gameFocusNode.requestFocus();
-    });
-  }
-
-  @override
-  void dispose() {
-    _gameFocusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Focus(
-        focusNode: _gameFocusNode,
-        autofocus: true,
-        onKeyEvent: (FocusNode node, KeyEvent event) {
-          debugPrint('Main Key event: ${event.logicalKey.keyLabel}');
-          // Forward the key event to the game
-          _game.onKeyEvent(event, {event.logicalKey});
-          return KeyEventResult.handled;
-        },
-        child: GameWidget(
-          game: _game,
-        ),
-      ),
+      home: const MainMenuScreen(),
     );
   }
 }

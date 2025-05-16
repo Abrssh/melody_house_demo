@@ -25,6 +25,9 @@ class AudioManager {
     "house_enter": AssetPath.houseEnterSound,
     "interaction_object": AssetPath.interactionObjectSound,
     "sheep_interaction": AssetPath.sheepInteractionSound,
+    // UI sounds
+    "selection": AssetPath.uiSelectionSound,
+    "confirm": AssetPath.uiConfirmSound,
   };
 
   // Transition sounds
@@ -137,6 +140,10 @@ class AudioManager {
 
   double getMusicVolume() {
     return _musicVolume;
+  }
+
+  double getSfxVolume() {
+    return _sfxVolume;
   }
 
   void pauseMusic() {

@@ -3,11 +3,11 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:melody_house_demo/Components/audio_manager.dart';
-import 'package:melody_house_demo/Components/indoor_scene.dart';
-import 'package:melody_house_demo/Components/outdoor_scene.dart';
-import 'package:melody_house_demo/Components/scene_transition.dart';
+import 'package:melody_house_demo/components/scenes/indoor_scene.dart';
+import 'package:melody_house_demo/components/scenes/outdoor_scene.dart';
+import 'package:melody_house_demo/components/ui/scene_transition.dart';
 import 'package:melody_house_demo/Constants/asset_path.dart';
+import 'package:melody_house_demo/engine_and_audio/audio_manager.dart';
 
 class MelodyHouseGame extends FlameGame with KeyboardEvents {
   Component? _currentScene;
@@ -24,7 +24,7 @@ class MelodyHouseGame extends FlameGame with KeyboardEvents {
       AssetPath.sheepSprite,
     ]);
 
-    await audioManager.initialize();
+    // await audioManager.initialize();
 
     // Load the outdoor scene
     // await loadOutdoorScene();
@@ -105,5 +105,11 @@ class MelodyHouseGame extends FlameGame with KeyboardEvents {
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
+  }
+
+  @override
+  void onDispose() {
+    audioManager.dispose();
+    super.onDispose();
   }
 }

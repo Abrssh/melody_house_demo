@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="53">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="59">
  <tileset firstgid="1" source="outdoor.tsx"/>
  <layer id="1" name="background_layer" width="30" height="20">
   <data encoding="csv">
@@ -28,17 +28,16 @@
  <objectgroup id="5" name="Collisions">
   <object id="4" x="33" y="23" width="14" height="16"/>
   <object id="6" x="263" y="41" width="17" height="14"/>
-  <object id="7" x="344" y="57" width="16" height="14"/>
+  <object id="7" x="345" y="60" width="14" height="9"/>
   <object id="8" x="290" y="148" width="12" height="8"/>
   <object id="9" x="108" y="99" width="9" height="15"/>
   <object id="10" x="322" y="149" width="11" height="7"/>
   <object id="11" x="340" y="277" width="8" height="6"/>
-  <object id="12" x="401" y="290" width="14" height="12"/>
-  <object id="13" x="464" y="291" width="15" height="11"/>
-  <object id="16" x="338" y="99" width="12" height="11"/>
+  <object id="12" x="404" y="294" width="8" height="5"/>
+  <object id="16" x="340" y="102" width="8" height="6"/>
   <object id="17" x="208" y="1" width="16" height="31"/>
   <object id="18" x="402" y="259" width="11" height="10"/>
-  <object id="19" x="465" y="291" width="14" height="11"/>
+  <object id="19" x="467" y="294" width="9" height="6"/>
   <object id="20" x="426" y="223" width="27" height="49"/>
   <object id="23" x="154" y="115" width="12" height="15"/>
   <object id="25" x="60" y="147" width="9" height="15"/>
@@ -51,7 +50,13 @@
   <object id="38" x="242" y="161" width="60" height="45"/>
   <object id="39" x="322" y="162" width="108" height="44"/>
   <object id="42" x="470" y="215" width="7" height="7"/>
-  <object id="43" x="437" y="184" width="7" height="7"/>
+  <object id="43" x="438" y="184" width="6" height="6"/>
+  <object id="53" x="340" y="230" width="7" height="5"/>
+  <object id="54" x="324" y="214" width="7" height="5"/>
+  <object id="55" x="292" y="215" width="7" height="5"/>
+  <object id="56" x="389" y="150" width="7" height="5"/>
+  <object id="57" x="438" y="119" width="7" height="5"/>
+  <object id="58" x="469" y="248" width="7" height="5"/>
  </objectgroup>
  <objectgroup id="7" name="SpawnPoints">
   <object id="44" name="player" x="96" y="47">

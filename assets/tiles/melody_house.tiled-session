@@ -5,7 +5,6 @@
     },
     "activeFile": "outdoor.tmx",
     "expandedProjectPaths": [
-        "."
     ],
     "fileStates": {
         "C:/Users/Abrham daniel/Desktop/Mini Carpool/Game/mini_carpoolgame/assets/tiles/Level 2.tmx": {
@@ -33,26 +32,26 @@
         },
         "indoor.tmx": {
             "expandedObjectLayers": [
-                7,
-                8
+                8,
+                7
             ],
             "scale": 3,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 232.33333333333331,
-                "y": 155.33333333333334
+                "x": 250.49999999999997,
+                "y": 159.83333333333334
             }
         },
         "outdoor.tmx": {
             "expandedObjectLayers": [
-                5,
-                7
+                7,
+                5
             ],
-            "scale": 5.5,
-            "selectedLayer": 2,
+            "scale": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 420.1818181818182,
-                "y": 282
+                "x": 203.5,
+                "y": 168.5
             }
         },
         "outdoor.tsx": {

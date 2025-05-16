@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:melody_house_demo/Constants/asset_path.dart';
-import 'package:melody_house_demo/melody_house.dart';
+import 'package:melody_house_demo/engine_and_audio/melody_house.dart';
 
 class SheepComponent extends SpriteAnimationComponent
     with HasGameReference<MelodyHouseGame> {

@@ -17,6 +17,7 @@ class AssetPath {
   // Audio files path
   static String outdoorMusic = "audio/background/outdoor_music.mp3";
   static String indoorMusic = "audio/background/indoor_music.mp3";
+  static String menuMusic = "audio/background/menu_music.mp3";
 
   // Player Movement Sound Effects path
   static String grassRunningSound = "sfx/player_movement/grass_running.wav";
