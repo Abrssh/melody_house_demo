@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:melody_house_demo/Components/camera_controller.dart';
 import 'package:melody_house_demo/Components/collision_block.dart';
 import 'package:melody_house_demo/Components/player_component.dart';
+import 'package:melody_house_demo/Components/special_zone_indicator.dart';
 import 'package:melody_house_demo/Constants/asset_path.dart';
 import 'package:melody_house_demo/melody_house.dart';
 
@@ -79,6 +80,13 @@ class OutdoorScene extends Component with HasGameReference<MelodyHouseGame> {
             debugPrint('Player spawn point set to: ${obj.position}');
           } else if (obj.name == 'indoor') {
             indoorGateWayPosition = Vector2(obj.x, obj.y);
+            // Add a visual indicator at the gateway position
+            final gatewayPositionIndicator = SpecialZoneIndicator2(
+              position: Vector2(obj.x, obj.y),
+              size: Vector2(obj.width, obj.height),
+            );
+            world.add(gatewayPositionIndicator);
+
             debugPrint('Indoor gateway spawn point set to: ${obj.position}');
           }
         }

@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "indoor.tmx",
+    "activeFile": "outdoor.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -33,25 +33,26 @@
         },
         "indoor.tmx": {
             "expandedObjectLayers": [
+                7,
                 8
             ],
-            "scale": 11,
-            "selectedLayer": 2,
+            "scale": 3,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 317.1818181818182,
-                "y": 215.0909090909091
+                "x": 232.33333333333331,
+                "y": 155.33333333333334
             }
         },
         "outdoor.tmx": {
             "expandedObjectLayers": [
-                7,
-                5
+                5,
+                7
             ],
-            "scale": 4,
-            "selectedLayer": 1,
+            "scale": 5.5,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 382.75,
-                "y": 276.25
+                "x": 420.1818181818182,
+                "y": 282
             }
         },
         "outdoor.tsx": {
@@ -72,9 +73,9 @@
     ],
     "project": "melody_house.tiled-project",
     "recentFiles": [
-        "outdoor.tmx",
-        "outdoor.tsx",
         "indoor.tmx",
+        "outdoor.tsx",
+        "outdoor.tmx",
         "C:/Users/Abrham daniel/Desktop/Mini Carpool/Game/mini_carpoolgame/assets/tiles/Level 2.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",

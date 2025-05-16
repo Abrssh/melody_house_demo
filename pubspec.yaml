@@ -71,6 +71,8 @@ flutter:
     - assets/images/characters/human/
     - assets/images/characters/human/idle/
     - assets/images/characters/human/run/
+    - assets/images/animals/
+    - assets/images/animals/sheep/
     - assets/audio/
     - assets/audio/background/
     - assets/audio/sfx/

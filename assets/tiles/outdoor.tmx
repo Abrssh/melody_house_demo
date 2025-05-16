@@ -57,13 +57,7 @@
   <object id="44" name="player" x="96" y="47">
    <point/>
   </object>
-  <object id="45" x="440" y="266">
-   <point/>
-  </object>
-  <object id="48" x="439" y="271">
-   <point/>
-  </object>
-  <object id="50" name="indoor" x="439" y="273">
+  <object id="50" name="indoor" x="440" y="274">
    <point/>
   </object>
  </objectgroup>

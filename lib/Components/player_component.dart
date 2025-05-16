@@ -5,6 +5,8 @@ import 'package:melody_house_demo/Components/collision_block.dart';
 import 'package:melody_house_demo/Constants/asset_path.dart';
 import 'package:melody_house_demo/melody_house.dart';
 
+enum InteractionType { gateway, sheep }
+
 class Player extends SpriteAnimationComponent
     with KeyboardHandler, HasGameReference<MelodyHouseGame> {
   // Movement properties
@@ -15,7 +17,7 @@ class Player extends SpriteAnimationComponent
   // Collision properties
   final List<CollisionBlock> collisionBlocks;
   late final RectangleComponent _collisionHitbox;
-  final bool _debugCollision = false; // Set to false in production
+  final bool _debugCollision = false; // Set to true in debugging
 
   // Footstep timer
   double _footstepTimer = 0.0;
@@ -30,9 +32,19 @@ class Player extends SpriteAnimationComponent
   late final TextComponent _interactionPrompt;
   bool _transitionInProgress = false; // Flag to prevent multiple transitions
 
+  // Sheep Interaction
+  final Vector2? sheepPosition;
+  final Function(String type)? onSheepReached;
+  final double _sheepInteractionDistance =
+      25.0; // Reduced distance to show prompt
+  bool _isNearSheep = false;
+  bool _sheepInteractionProgress = false;
+
   // Animations
   late final SpriteAnimation _idleAnimation;
   late final SpriteAnimation _runAnimation;
+
+  bool _textFlipped = false;
 
   Player({
     required Vector2 position,
@@ -41,6 +53,8 @@ class Player extends SpriteAnimationComponent
     this.currentSurface = "grass",
     Vector2? size,
     required this.collisionBlocks,
+    this.sheepPosition,
+    this.onSheepReached,
   }) : super(
             position: position,
             size: size ?? Vector2(32, 48),
@@ -49,6 +63,8 @@ class Player extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+
+    debugPrint('Player loaded');
 
     // Create idle animation with calculated dimensions
     _idleAnimation =
@@ -111,11 +127,8 @@ class Player extends SpriteAnimationComponent
         ),
       ),
       anchor: Anchor.center,
-      position: Vector2(0, -40), // Position above the player
+      position: Vector2(20, -40), // Position above the player
     );
-
-    // Start with the prompt not added to the component tree
-    // We'll add/remove it dynamically instead of toggling visibility
 
     // Debug gateway position
     if (_debugCollision) {
@@ -175,28 +188,54 @@ class Player extends SpriteAnimationComponent
     if (_velocity.x > 0 && !_facingRight) {
       _facingRight = true;
       flipHorizontallyAroundCenter();
+      if (_textFlipped) {
+        _textFlipped = false;
+        _interactionPrompt.flipHorizontallyAroundCenter();
+      }
     } else if (_velocity.x < 0 && _facingRight) {
       _facingRight = false;
       flipHorizontallyAroundCenter();
+      _textFlipped = true;
+      if (_textFlipped) {
+        _interactionPrompt.flipHorizontallyAroundCenter();
+      }
     }
 
     // Check distance to gateway
+    _isNearGateway = handlePlayerInteraction(_isNearGateway, gateWayPosition,
+        _interactionDistance, InteractionType.gateway);
+
+    // Check distance to sheep
+    if (sheepPosition != null) {
+      _isNearSheep = handlePlayerInteraction(_isNearSheep, sheepPosition!,
+          _sheepInteractionDistance, InteractionType.sheep);
+    }
+  }
+
+  bool handlePlayerInteraction(bool nearZone, Vector2 gateWayPosition,
+      double interactionDistance, InteractionType interactionType) {
     final distanceToGateway = position.distanceTo(gateWayPosition);
-    final wasNearGateway = _isNearGateway;
-    _isNearGateway = distanceToGateway <= _interactionDistance;
+    final wasNearGateway = nearZone;
+    nearZone = distanceToGateway <= interactionDistance;
 
     // More efficient approach: Add/remove the prompt component instead of toggling visibility
-    if (_isNearGateway && !wasNearGateway) {
+    if (nearZone && !wasNearGateway) {
       // Only add if not already a child
       if (!children.contains(_interactionPrompt)) {
         add(_interactionPrompt);
       }
-    } else if (!_isNearGateway && wasNearGateway) {
+    } else if (!nearZone && wasNearGateway) {
       // Only remove if it's a child
       if (children.contains(_interactionPrompt)) {
         remove(_interactionPrompt);
       }
+      if (interactionType == InteractionType.sheep &&
+          _sheepInteractionProgress) {
+        _sheepInteractionProgress = false;
+        onSheepReached!("end");
+      }
     }
+    return nearZone;
   }
 
   bool _checkCollision(Vector2 movement) {
@@ -270,14 +309,24 @@ class Player extends SpriteAnimationComponent
     // Gateway interaction - only trigger on key down, not while key is held
     if (event is KeyDownEvent &&
         event.logicalKey == LogicalKeyboardKey.keyE &&
-        _isNearGateway) {
-      _transitionInProgress = true; // Prevent multiple transitions
+        (_isNearGateway || _isNearSheep)) {
+      if (_isNearGateway) {
+        _transitionInProgress = true; // Prevent multiple transitions
 
-      // Use Future.delayed to ensure the transition happens after the current frame
-      Future.delayed(Duration.zero, () {
-        onGateWayReached();
-      });
+        // play interaction sound
+        game.audioManager.playInteractionSound('interaction_object');
 
+        // Use Future.delayed to ensure the transition happens after the current frame
+        Future.delayed(Duration.zero, () {
+          onGateWayReached();
+        });
+      } else if (_isNearSheep && !_sheepInteractionProgress) {
+        _sheepInteractionProgress =
+            true; // Using the same flag for sheep interaction
+        if (onSheepReached != null) {
+          onSheepReached!("start");
+        }
+      }
       return true;
     }
 

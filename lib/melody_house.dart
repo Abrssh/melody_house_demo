@@ -17,10 +17,11 @@ class MelodyHouseGame extends FlameGame with KeyboardEvents {
   @override
   Future<void> onLoad() async {
     await images.loadAll([
-      'characters/human/idle/base_idle_strip9.png',
-      'characters/human/run/base_run_strip8.png',
-      'characters/human/idle/curlyhair_idle_strip9.png',
-      'characters/human/run/curlyhair_run_strip8.png',
+      AssetPath.playerIdleSprite,
+      AssetPath.playerRunSprite,
+      AssetPath.curlyhairPlayerIdle,
+      AssetPath.curlyhairPlayerRun,
+      AssetPath.sheepSprite,
     ]);
 
     await audioManager.initialize();

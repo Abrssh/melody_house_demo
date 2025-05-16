@@ -11,6 +11,7 @@ class AudioManager {
 
   // Background music player
   late AudioPlayer _bgmPlayer;
+  // To control interaction sounds
 
   // Footstep sound players (for different surfaces)
   final Map<String, String> _footstepSounds = {
@@ -22,6 +23,8 @@ class AudioManager {
   // Interaction sounds
   final Map<String, String> _interactionSounds = {
     "house_enter": AssetPath.houseEnterSound,
+    "interaction_object": AssetPath.interactionObjectSound,
+    "sheep_interaction": AssetPath.sheepInteractionSound,
   };
 
   // Transition sounds
@@ -87,13 +90,14 @@ class AudioManager {
   }
 
   // Play interaction sound
-  void playInteractionSound(String interaction) {
-    if (_isMuted) return;
+  Future<AudioPlayer> playInteractionSound(String interaction) async {
+    if (_isMuted) return AudioPlayer();
 
     if (_interactionSounds.containsKey(interaction)) {
-      FlameAudio.play(_interactionSounds[interaction]!,
+      return await FlameAudio.play(_interactionSounds[interaction]!,
           volume: _sfxVolume * _masterVolume);
     }
+    return Future.value(AudioPlayer());
   }
 
   // Play transition sound
@@ -129,6 +133,18 @@ class AudioManager {
     } else {
       _bgmPlayer.setVolume(_musicVolume * _masterVolume);
     }
+  }
+
+  double getMusicVolume() {
+    return _musicVolume;
+  }
+
+  void pauseMusic() {
+    _bgmPlayer.pause();
+  }
+
+  void resumeMusic() {
+    _bgmPlayer.resume();
   }
 
   void dispose() {
